@@ -1,0 +1,6 @@
+com\mycompany\clinicadental\controller\PacienteController.class
+com\mycompany\clinicadental\model\Dentista.class
+com\mycompany\clinicadental\repository\PacienteRepository.class
+com\mycompany\clinicadental\Clinicadental.class
+com\mycompany\clinicadental\model\Cita.class
+com\mycompany\clinicadental\model\Paciente.class
