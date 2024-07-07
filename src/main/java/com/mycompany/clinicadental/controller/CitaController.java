@@ -70,17 +70,27 @@ public class CitaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Cita> updateCita(@PathVariable(value = "id") Long citaId,
-                                           @RequestBody Cita citaDetails) {
-        Cita cita = citaRepository.findById(citaId)
-                .orElse(null);
-        if (cita == null) {
-            return ResponseEntity.notFound().build();
+                                           @RequestBody CitaDTO citaDTO) {
+        try {
+            Cita cita = citaRepository.findById(citaId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cita no encontrada con id: " + citaId));
+
+            Paciente paciente = pacienteRepository.findById(citaDTO.getPacienteId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Paciente no encontrado con id: " + citaDTO.getPacienteId()));
+
+            Dentista dentista = dentistaRepository.findById(citaDTO.getDentistaId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Dentista no encontrado con id: " + citaDTO.getDentistaId()));
+
+            cita.setPaciente(paciente);
+            cita.setDentista(dentista);
+            cita.setFechaHora(citaDTO.getFechaHora());
+            cita.setMotivo(citaDTO.getMotivo());
+
+            Cita updatedCita = citaRepository.save(cita);
+            return ResponseEntity.ok(updatedCita);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.badRequest().body(null);
         }
-        cita.setFechaHora(citaDetails.getFechaHora());
-        cita.setPaciente(citaDetails.getPaciente());
-        cita.setDentista(citaDetails.getDentista());
-        Cita updatedCita = citaRepository.save(cita);
-        return ResponseEntity.ok(updatedCita);
     }
 
     @DeleteMapping("/{id}")
