@@ -14,9 +14,14 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost","http://localhost:63342","http://localhost:8080","http://localhost:5173")
+                        .allowedOrigins(
+                        "http://localhost:5173",  // Para desarrollo local
+                        "http://localhost",       // Para producción si usas localhost
+                        "https://saturnnova.cloud" // Para producción si usas el dominio
+                )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*");
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
